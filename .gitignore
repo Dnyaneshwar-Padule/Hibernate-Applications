@@ -46,5 +46,5 @@ build/
 #Eclipse and IntelliJ IDE
 /Eclipse
 /IntelliJ
-.eclipse
-.intelliJ
+.eclipse.lnk
+.intelliJ.lnk
