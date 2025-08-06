@@ -1,0 +1,50 @@
+# === Java Compiled Files ===
+*.class
+*.jar
+*.war
+*.ear
+
+# === Java Log Files ===
+*.log
+
+# === Build Directories ===
+/bin/
+/target/
+/out/
+
+# === Eclipse Files ===
+.project
+.classpath
+.settings/
+
+# === IntelliJ IDEA Files ===
+.idea/
+*.iml
+*.iws
+
+# === OS Generated Files ===
+.DS_Store
+Thumbs.db
+
+# === Maven or Gradle Wrapper ===
+.mvn/
+.gradle/
+build/
+
+# === Optional: ignore environment config ===
+*.env
+*.properties
+
+#JDBC Jars
+/MySql-JDBC-Jar
+/PostgreSQL-JDBC-Jar
+
+#Eclipse metadata
+/.metadata
+.metadata/
+
+#Eclipse and IntelliJ IDE
+/Eclipse
+/IntelliJ
+.eclipse
+.intelliJ
