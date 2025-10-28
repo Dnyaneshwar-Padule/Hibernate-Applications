@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        
+        <!-- Database properties-->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hibernate</property>
+        <property name="hibernate.connection.user">root</property>
+        <property name="hibernate.connection.password">root</property>
+
+        <!-- Hibernate Properties -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">false</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
+        <!--
+            Create property :
+                * creates a new table
+                * If table exists, it drops it
+
+            Update property :
+                * Update property checks database schema and updates it to the new one
+                * It create the table if not exists
+                * If exists, it checks the database design if there are modifications it modifies the database design else it does nothing
+                * This property is closest to, CREATE TABLE IF NOT EXISTS
+
+            Validate Property :
+                * It validates the database design
+                * It does not create or drops table
+
+            create-drop property:
+                * It creates a table, when application starts
+                * At the time application ends, it drops the table
+                * In short, it creates temporary tables
+
+            none Property :
+                * It does nothing.
+        -->
+
+        <!-- Mapping file name -->
+        <mapping resource="employee.hbm.xml"/>
+        
+    </session-factory>
+</hibernate-configuration>

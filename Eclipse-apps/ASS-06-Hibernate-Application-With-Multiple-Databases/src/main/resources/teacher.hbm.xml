@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+
+	<!-- Mapping between entity class and database table -->
+ 	<class name="com.tca.entities.Teacher" table="teacher">
+ 		
+ 		<!-- Mapping between fields and columns -->
+ 		<id name="tno"  column="TNO"></id>
+ 		<property name="name" column="NAME"></property>
+ 		<property name="salary" column="SALARY"></property>
+ 	
+ 	</class>
+
+</hibernate-mapping>

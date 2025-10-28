@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	
+<hibernate-configuration>
+	<session-factory>
+		
+		<!-- Database Properties -->
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/hibernate</property>
+		<property name="hibernate.connection.user">dnyaneshwar</property>
+		<property name="hibernate.connection.password">root@3121</property>
+	
+		<!-- Hibernate properties -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property> 
+		<property name="hibernate.show_sql">true</property>     <!-- Show Hibernate Generated SQL  -->
+		<property name="hibernate.format_sql">false</property>   <!-- Beautify SQL query -->
+		<property name="hibernate.hbm2ddl.auto">none</property> <!-- Hibernate Mapping To Data Defination Language -->
+	
+		<!--
+			hbm2ddl properties
+				* create
+				* create-drop
+				* validate
+				* update
+				* none 
+		-->
+		
+		<!-- Mapping File -->
+		<mapping resource="student.hbm.xml"/>
+	
+	</session-factory>
+</hibernate-configuration>
