@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	
+<!--  Hibernate Configuration details -->	
+<hibernate-configuration>
+	<session-factory>
+	
+		<!-- Database Configuration Details -->	
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/hibernate</property>
+		<property name="hibernate.connection.user">dnyaneshwar</property>
+		<property name="hibernate.connection.password">root@3121</property>
+		
+		<!-- Hibernate properties -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">false</property>
+		<property name="hibernate.hbm2ddl.auto">create</property>
+
+		<!-- 
+			1.Create
+			- It creates a new table
+			- If table already exists, It drops the old table and creates a new one
+			
+			2.create-drop
+			- When application starts, it creates a new table
+			- When application ends, it drops that table
+			- If Table already exists, it drops the old table and creates a new table
+			- In short, It creates a temporary table
+			
+			3. validate
+			- It validates the database design (database schema)
+			- If entity mapping does not match with database schema, it throws SchemaManagementException
+			- It does not create or drops table, it just makes sure the entity mapping and actual database design are mapping well with each other
+			
+			4. update
+			- It checks the entity mapping and database schema, if there is change in entity mapping it also makes similar changes to the databse schema
+			- It does not drop entire table, or recreate it or delete records, it just modifies databse schema (design)
+			- It acts like CREATE TABLE IF NOT EXISTS
+			
+			5. none
+			- It does nothing...
+		-->
+
+		<!-- mapping class  -->
+		<mapping class="com.tca.entities.Student" />
+
+	</session-factory>
+</hibernate-configuration>
