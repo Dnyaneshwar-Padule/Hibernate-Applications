@@ -1,13 +1,8 @@
 package com.tca.entities;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 @Entity(name="dept")
 public class Department {
@@ -18,8 +13,6 @@ public class Department {
 	@Column(name="string", nullable = false)
 	private String name;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "department")
-	private List<Employee> employees;
 
 	public Integer getId() {
 		return id;
@@ -36,14 +29,5 @@ public class Department {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public List<Employee> getEmployees() {
-		return employees;
-	}
-
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
-	
 	
 }
