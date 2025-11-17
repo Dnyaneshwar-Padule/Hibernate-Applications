@@ -2,13 +2,10 @@ package com.tca;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.tca.entities.Course;
-import com.tca.entities.Student;
 import com.tca.utils.HibernateUtil;
 
 
@@ -87,6 +84,7 @@ public class App {
 				System.out.println(c.getName());
 			
 			*/
+			
 			
 			//delete a student
 			/*
