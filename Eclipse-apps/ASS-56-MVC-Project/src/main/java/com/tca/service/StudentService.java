@@ -15,4 +15,8 @@ public interface StudentService {
 	public abstract List<Student> getStudentsByName(String name);
 	
 	public abstract List<Student> getStudentsByCity(String city);
+	
+	public abstract Boolean updateStudent(Integer rno);
+	
+	public abstract Boolean deleteStudent(Integer rno);
 }

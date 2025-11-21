@@ -15,4 +15,8 @@ public interface StudentDao {
 	public abstract List<Student> fetchStudentsByName(String name);
 	
 	public abstract List<Student> fetchstudentsByCity(String city);
+	
+	public abstract Boolean updateStudent(Student student);
+	
+	public abstract Boolean deleteStudent(Student student); 
 }

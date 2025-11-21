@@ -126,5 +126,53 @@ public class StudentDaoImpl implements StudentDao {
 		}
 	}
 
+	@Override
+	public Boolean updateStudent(Student student) {
+		Session session = null;
+		Transaction transction = null;
+		Boolean result = false;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			transction = session.beginTransaction();
+			result = session.merge(student) == null ? false : true;
+			transction.commit();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			if(transction != null)
+				transction.rollback();
+		}
+		finally {
+			if(session != null)
+				session.close();
+		}
+		return result;
+	}
+
+	@Override
+	public Boolean deleteStudent(Student student) {
+		Session session = null;
+		Transaction transaction = null;
+		boolean result = false;
+		
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			transaction = session.beginTransaction();
+			session.remove(student);
+			transaction.commit();
+			result = true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			if(transaction != null) 
+				transaction.rollback();
+		}
+		finally {
+			if(session != null)	
+				session.close();
+		}
+		
+		return result;
+	}
 
 }
