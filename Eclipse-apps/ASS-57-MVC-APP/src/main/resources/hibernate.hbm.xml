@@ -15,12 +15,14 @@
 		
 		<!-- Hibernate Configurations -->
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.show_sql">false</property>
 		<property name="hibernate.format_sql">false</property>
-		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.hbm2ddl.auto">none</property>
 		
 		<!-- Entity Mapping -->
 		<mapping class="com.tca.entity.Student" />
+		<mapping class="com.tca.entity.Course" />
+		<mapping class="com.tca.entity.StudentCourse" />
 		
 	</session-factory>
 </hibernate-configuration>

@@ -8,10 +8,12 @@ import java.util.List;
 import com.tca.controller.ExceptionController;
 import com.tca.entity.Course;
 import com.tca.entity.Student;
+import com.tca.entity.StudentCourse;
 import com.tca.exception.AppException;
 import com.tca.exception.DatabaseException;
 import com.tca.exception.NotFoundException;
 import com.tca.factory.CourseServiceFactory;
+import com.tca.factory.StudentCourseServiceFactory;
 import com.tca.factory.StudentServiceFactory;
 import com.tca.service.StudentService;
 import com.tca.util.HibernateUtil;
@@ -68,6 +70,33 @@ public class App {
     			case 7:
     				optionGetStudentByCity();
     				break;
+    			case 8:
+    				optionSaveNewCourse();
+    				break;
+    			case 9:
+    				optionUpdateCourse();
+    				break;
+    			case 10:
+    				optionDeleteCourse();
+    				break;
+    			case 11:
+    				optionSeeAllCourses();
+    				break;
+    			case 12:
+    				optionSearchCourseByCno();
+    				break;
+    			case 13:
+    				optionSearchCourseByName();
+    				break;
+    			case 14:
+    				optionAddNewRegistration();
+    				break;
+    			case 15:
+    				optionSeeCourseWiseListOfStudents();
+    				break;
+    			case 16:
+    				optionSeeStudentWiseListOfCourses();
+    				break;
     			case 17:
     		   		break outerloop;
     			default:
@@ -93,8 +122,109 @@ public class App {
    		System.out.println("Done...");
     }
     
-    private static void optionAddNewRegistration() {
+    
+    private static void optionSeeStudentWiseListOfCourses() {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	try {
+    		System.out.print("Enter the roll number : ");
+    		List<StudentCourse> enrollments = StudentCourseServiceFactory
+    				.getStudentCourseServiceInstance()
+    				.getRegistrationsByStudent(Integer.parseInt(br.readLine()));
     	
+    		if(enrollments == null || enrollments.size() < 1) {
+    			System.out.println("Enrollments not found !");
+    		}
+    		else {
+    			System.out.println("The students is enrolled in following courses ");
+    			for(StudentCourse enrollment : enrollments) {
+    				System.out.println("Course number : " + enrollment.getCourse().getCno());
+    				System.out.println("Course  Name  : " + enrollment.getCourse().getName());
+    				System.out.println("");
+    			}
+    		}
+    	}
+    	catch( NumberFormatException de ) {
+    		System.out.println("Please enter valid data !");
+    	}
+    	catch(NotFoundException ne) {
+    		ExceptionController.handel(ne);
+    	}
+    	catch(AppException ae) {
+    		ExceptionController.handel(ae);
+    	}
+    	catch( Exception e ) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    
+    private static void optionSeeCourseWiseListOfStudents() {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	try {
+    		System.out.print("Enter the course number : ");
+    		List<StudentCourse> enrollments = StudentCourseServiceFactory
+    				.getStudentCourseServiceInstance()
+    				.getRegistrationsByCourse(Integer.parseInt(br.readLine()));
+    	
+    		if(enrollments == null || enrollments.size() < 1) {
+    			System.out.println("Enrollments not found !");
+    		}
+    		else {
+    			System.out.println("The following students are enrolled in " + enrollments.get(0).getCourse().getName());
+    			for(StudentCourse enrollment : enrollments) {
+    				System.out.println("Student  Roll no   : " + enrollment.getStudent().getRno());
+    				System.out.println("Student     Name   : " + enrollment.getStudent().getName());
+    				System.out.println("Student Percentage : " + enrollment.getStudent().getPer());
+    				System.out.println("Student     City   : " + enrollment.getStudent().getCity());    				
+    				System.out.println("");
+    			}
+    		}
+    	}
+    	catch( NumberFormatException de ) {
+    		System.out.println("Please enter valid data !");
+    	}
+    	catch(NotFoundException ne) {
+    		ExceptionController.handel(ne);
+    	}
+    	catch(AppException ae) {
+    		ExceptionController.handel(ae);
+    	}
+    	catch( Exception e ) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    private static void optionAddNewRegistration() {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	try {
+    		System.out.print("Enter the roll number of student : ");
+    		Integer rno = Integer.parseInt( br.readLine() );
+    		System.out.print("Enter the course number : ");
+    		Integer cno = Integer.parseInt(br.readLine());
+    		
+    		if( StudentCourseServiceFactory.getStudentCourseServiceInstance().addRegistration(rno, cno) ) {
+    			System.out.println("Enrollment is successfull !");
+    		}
+    		else {
+    			System.out.println("Failed to enroll student !");
+    		}
+    		
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
+    	catch(NotFoundException ne) {
+    		ExceptionController.handel(ne);
+    	}
+    	catch(AppException ae) {
+    		ExceptionController.handel(ae);
+    	}
+    	catch(NumberFormatException ne) {
+    		System.out.println("Please enter valid data !");
+    	}
+    	catch(Exception e) {
+    		System.out.println("Something went wrong while enrolling student !");	
+    	}
     }
     
     
@@ -223,8 +353,19 @@ public class App {
     	BufferedReader br = new BufferedReader( new InputStreamReader( System.in));
     	try {
     		Course c = new Course();
-    		System.out.print("Enter the course name : ");
-    		c.setName( br.readLine() );
+    		String name = null;
+    		
+    		while(true) {
+    			System.out.print("Enter the course name : ");
+    			name = br.readLine();
+    			
+    			if(name.isBlank())
+    				System.out.println("Course name can not be blank !");
+    			else 
+    				break;
+    		}
+    		
+    		c.setName( name );
     		Integer cno = CourseServiceFactory.getCourseServiceInstance().addCourse(c);
     		if(cno == null) {
     			System.out.println("Unable to save course !");
