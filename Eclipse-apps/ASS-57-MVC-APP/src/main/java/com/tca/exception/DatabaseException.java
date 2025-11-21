@@ -1,0 +1,13 @@
+package com.tca.exception;
+
+public class DatabaseException extends Exception {
+	private static final long serialVersionUID = 1L;
+
+	public DatabaseException(String message) {
+		super(message);
+	}
+	
+	public DatabaseException(String message, Throwable exception) {
+		super(message, exception);
+	}
+}
