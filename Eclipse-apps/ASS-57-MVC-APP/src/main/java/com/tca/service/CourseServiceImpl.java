@@ -1,44 +1,47 @@
 package com.tca.service;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
 import com.tca.entity.Course;
+import com.tca.exception.AppException;
+import com.tca.exception.DatabaseException;
+import com.tca.exception.NotFoundException;
 import com.tca.factory.CourseDaoFactory;
 
 public class CourseServiceImpl implements CourseService {
 
 	@Override
-	public Integer addCourse(Course c) {
+	public Integer addCourse(Course c) throws DatabaseException {
 		c.setName( c.getName().toLowerCase() );
 		return CourseDaoFactory.getCourseDaoInstance().saveCourse(c);
 	}
 
 	@Override
-	public Course getCourse(Integer cno) {
+	public Course getCourse(Integer cno) throws DatabaseException {
 		return CourseDaoFactory.getCourseDaoInstance().fetchCourse(cno);
 	}
 
 	@Override
-	public List<Course> getAllCourses() {
+	public List<Course> getAllCourses() throws DatabaseException {
 		return CourseDaoFactory.getCourseDaoInstance().fetchAllCourses();
 	}
 
 	@Override
-	public List<Course> getCourseByName(String courseName) {
+	public List<Course> getCourseByName(String courseName) throws DatabaseException {
 		return CourseDaoFactory.getCourseDaoInstance().fetchCourseByName(courseName.toLowerCase());
 	}
 
 	@Override
-	public Boolean updateCourse(Integer cno) {
+	public Boolean updateCourse(Integer cno) throws NotFoundException,DatabaseException, AppException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in) );
 		try {
 			Course c = getCourse(cno);
 			
 			if( cno == null) {
-				System.out.println("Course does not exist with course number: " + cno);
-				return false;
+				throw new NotFoundException("Course does not exist with course number: " + cno);
 			}
 		
 			String newCourseName = null;
@@ -55,20 +58,25 @@ public class CourseServiceImpl implements CourseService {
 			c.setName(newCourseName.toLowerCase());
 			return CourseDaoFactory.getCourseDaoInstance().updateCourse(c);
 		}
+		catch(DatabaseException de) {
+			throw de;
+		}
+		catch(IOException ie) {
+			throw new AppException("Input Stream closed", ie);
+		}
 		catch(Exception e) {
-			return false;
+			throw new AppException("Unkown exception :- " + e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public Boolean deleteCourse(Integer cno) {
+	public Boolean deleteCourse(Integer cno) throws DatabaseException, AppException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in) );
 		try {
 			Course c = getCourse(cno);
 			
 			if( cno == null) {
-				System.out.println("Course does not exist with course number: " + cno);
-				return false;
+				throw new NotFoundException("Course does not exist with course number: " + cno);
 			}
 		
 			System.out.println("** Course details **");
@@ -92,8 +100,14 @@ public class CourseServiceImpl implements CourseService {
 				return CourseDaoFactory.getCourseDaoInstance().deleteCourse(c);
 			return false;
 		}
+		catch(DatabaseException de) {
+			throw de;
+		}
+		catch(IOException ie) {
+			throw new AppException("Input Stream closed", ie);
+		}
 		catch(Exception e) {
-			return false;
+			throw new AppException("Unkown exception :- " + e.getMessage(), e);
 		}
 		
 	}

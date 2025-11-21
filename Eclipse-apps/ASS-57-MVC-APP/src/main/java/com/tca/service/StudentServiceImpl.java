@@ -8,6 +8,7 @@ import java.util.List;
 import com.tca.entity.Student;
 import com.tca.exception.AppException;
 import com.tca.exception.DatabaseException;
+import com.tca.exception.NotFoundException;
 import com.tca.factory.StudentDaoFactory;
 
 public class StudentServiceImpl implements StudentService {
@@ -40,14 +41,12 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public Boolean updateStudent(Integer rno) throws AppException, DatabaseException {
+	public Boolean updateStudent(Integer rno) throws AppException, DatabaseException, NotFoundException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		Boolean result = false;
 		try {
 			Student student = getStudent(rno);
 			if(student == null) {
-				System.out.println("Student with roll number " + rno + " does not exists !");
-				return result;
+				throw new NotFoundException("Student with roll number " + rno + " does not exists !");
 			}
 			
 			String newName = null;
@@ -96,19 +95,19 @@ public class StudentServiceImpl implements StudentService {
 		catch(IOException ie) {
 			throw new AppException("Input Stream closed", ie);
 		}
+		catch(Exception e) {
+			throw new AppException("Unkown exception :- " + e.getMessage(), e);
+		}
 		
-		return result;
 	}
 
 	@Override
-	public Boolean deleteStudent(Integer rno) {
+	public Boolean deleteStudent(Integer rno) throws DatabaseException, AppException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		Boolean result = false;
 		try {
 			Student student = getStudent(rno);
 			if(student == null) {
-				System.out.println("Student with roll number " + rno + " does not exists !");
-				return result;
+				throw new NotFoundException("Student with roll number " + rno + " does not exists !");
 			}
 			
 			System.out.println("** Student Data **");
@@ -128,12 +127,17 @@ public class StudentServiceImpl implements StudentService {
 			}
 			
 			if (Character.toLowerCase( choice.trim().charAt(0) ) == 'y')
-				result =  StudentDaoFactory.getStudentDaoInstance().deleteStudent(student);
+				return StudentDaoFactory.getStudentDaoInstance().deleteStudent(student);
+			return false;
+		}
+		catch(DatabaseException de) {
+			throw de;
+		}
+		catch(IOException ie) {
+			throw new AppException("Input Stream closed", ie);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			throw new AppException("Unkown exception :- " + e.getMessage(), e);
 		}
-		
-		return result;
 	}
 }

@@ -5,7 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import com.tca.controller.ExceptionController;
+import com.tca.entity.Course;
 import com.tca.entity.Student;
+import com.tca.exception.AppException;
+import com.tca.exception.DatabaseException;
+import com.tca.exception.NotFoundException;
+import com.tca.factory.CourseServiceFactory;
 import com.tca.factory.StudentServiceFactory;
 import com.tca.service.StudentService;
 import com.tca.util.HibernateUtil;
@@ -87,8 +93,152 @@ public class App {
    		System.out.println("Done...");
     }
     
+    private static void optionAddNewRegistration() {
+    	
+    }
+    
+    
+    private static void optionSearchCourseByName() {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	try {
+    		System.out.print("Enter the Course name : ");
+    		String courseName =  br.readLine();
+    		List<Course> courses =  CourseServiceFactory.getCourseServiceInstance().getCourseByName(courseName);
+    		if(courses == null) {
+    			System.out.println("No courses found !");
+    		}
+    		else {
+    			System.out.println("***  Courses  ***");
+        		for(Course c : courses) {
+        			System.out.println("Course  no  :" + c.getCno());
+        			System.out.println("Course name :" + c.getName());
+        		}
+    		}
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
+    	catch(Exception e) {
+    		System.out.println("Something went wrong while fetching course !");	
+    	}
+    }
+    
+    private static void optionSearchCourseByCno() {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	try {
+    		System.out.print("Enter the Course no : ");
+    		Integer cno = Integer.parseInt( br.readLine() );
+    		Course course = CourseServiceFactory.getCourseServiceInstance().getCourse(cno);
+    		if(course == null) {
+    			System.out.println("Course does not exists with course number : " + cno);
+    		}
+    		else {
+    			System.out.println("Course  no  :" + course.getCno());
+    			System.out.println("Course name :" + course.getName());
+    		}
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
+    	catch(Exception e) {
+    		System.out.println("Something went wrong while fetching course !");	
+    	}
+    }
+    
+    private static void optionSeeAllCourses() {
+    	try {
+    		List<Course> courses = CourseServiceFactory.getCourseServiceInstance().getAllCourses();
+    		if(courses == null || courses.size() < 1) {
+    			System.out.println("No courses found !");
+    		}
+    		else {
+    			System.out.println("***  Courses  ***");
+    			for(Course c : courses) {
+    				System.out.println("Course  no  :" + c.getCno());
+    				System.out.println("Course name :" + c.getName());
+    			}    			
+    		}
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
+    	catch(Exception e) {
+    		System.out.println("Something went wrong while fetching courses !");    		
+    	}
+    }
+    
+    private static void optionDeleteCourse() {
+    	BufferedReader br = new BufferedReader( new InputStreamReader( System.in));
+    	try {
+    		System.out.print("Enter the course number : ");
+    		Integer cno = Integer.parseInt(br.readLine());
+    		if (  CourseServiceFactory.getCourseServiceInstance().updateCourse(cno) ) {
+    			System.out.println("Record is deleted successfully !");
+    		}
+    		else {
+    			System.out.println("Unable to delete record !");
+    		}
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
+    	catch(NotFoundException ne) {
+    		ExceptionController.handel(ne);
+    	}
+    	catch(AppException ae) {
+    		ExceptionController.handel(ae);
+    	}
+    	catch(Exception e) {
+    		System.out.println("Something went wrong while deleting course record !");
+    	}
+    }
+    
+    private static void optionUpdateCourse() {
+    	BufferedReader br = new BufferedReader( new InputStreamReader( System.in));
+    	try {
+    		System.out.print("Enter the course number : ");
+    		Integer cno = Integer.parseInt(br.readLine());
+    		if (  CourseServiceFactory.getCourseServiceInstance().updateCourse(cno) ) {
+    			System.out.println("Record is updated successfully !");
+    		}
+    		else {
+    			System.out.println("Unable to update record !");
+    		}
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
+    	catch(NotFoundException ne) {
+    		ExceptionController.handel(ne);
+    	}
+    	catch(AppException ae) {
+    		ExceptionController.handel(ae);
+    	}
+    	catch(Exception e) {
+    		System.out.println("Something went wrong while updating course record !");
+    	}
+    }
+    
     private static void optionSaveNewCourse() {
-    	BufferedReader br = new BufferedReader(System.in);
+    	BufferedReader br = new BufferedReader( new InputStreamReader( System.in));
+    	try {
+    		Course c = new Course();
+    		System.out.print("Enter the course name : ");
+    		c.setName( br.readLine() );
+    		Integer cno = CourseServiceFactory.getCourseServiceInstance().addCourse(c);
+    		if(cno == null) {
+    			System.out.println("Unable to save course !");
+    		}
+    		else {
+    			System.out.println("Course is saved with course no : " + cno);
+    		}
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
+    	catch(Exception e) {
+    		System.out.println("Something went wrong while saving course record !");
+    	}
     }
     
     private static void optionGetStudentByRno() {
@@ -108,6 +258,9 @@ public class App {
     			System.out.println("Student percentage : " + student.getPer());
     		}
     	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
     	catch(NumberFormatException ne) {
     		System.out.println("Please enter valid roll number !");
     	}
@@ -122,6 +275,12 @@ public class App {
     		System.out.print("Enter the roll number of the student : ");
     		if( StudentServiceFactory.getStudentServiceInstance().deleteStudent( Integer.parseInt(br.readLine()) ) ) 
     			System.out.println("Student record is deleted successfully !");
+    	}
+    	catch(AppException ae) {
+    		ExceptionController.handel(ae);
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
     	}
     	catch(NumberFormatException ne) {
     		System.out.println("Please enter valid roll number !");
@@ -138,6 +297,12 @@ public class App {
     		System.out.print("Enter the roll number of the student : ");
     		if( StudentServiceFactory.getStudentServiceInstance().updateStudent( Integer.parseInt(br.readLine()) ) ) 
     			System.out.println("Student record is updated successfully !");
+    	}
+    	catch(AppException ae) {
+    		ExceptionController.handel(ae);
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
     	}
     	catch(NumberFormatException e) {
     		System.out.println("Please enter valid roll number !");
@@ -170,6 +335,9 @@ public class App {
     			}
     		}
     	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
     	catch(Exception e) {
     		System.out.println("Something went wrong while fetching data !");
     	}
@@ -198,6 +366,9 @@ public class App {
     			}
     		}
     	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
+    	}
     	catch(Exception e) {
     		System.out.println("Something went wrong while fetching data !");
     	}
@@ -223,6 +394,9 @@ public class App {
     			}
     		}
     		
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
     	}
     	catch(Exception e) {
     		System.out.println("Something went wrong while fetching data !");
@@ -254,6 +428,9 @@ public class App {
     			System.out.println("Student is saved with roll number : " + id);
     		}
     		
+    	}
+    	catch(DatabaseException de) {
+    		ExceptionController.handel(de);
     	}
     	catch(NumberFormatException ne) {
     		System.out.println("Enter valid percentage !");

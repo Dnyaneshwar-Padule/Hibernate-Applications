@@ -3,13 +3,15 @@ package com.tca.service;
 import java.util.List;
 
 import com.tca.entity.StudentCourse;
+import com.tca.exception.AppException;
+import com.tca.exception.DatabaseException;
 
 public interface StudentCourseService {
 
-	public abstract Boolean addRegistration(Integer rno, Integer cno);
+	public abstract Boolean addRegistration(Integer rno, Integer cno) throws AppException, DatabaseException;
 	
-	public abstract List<StudentCourse> getRegistrationsByCourse(Integer cid);
+	public abstract List<StudentCourse> getRegistrationsByCourse(Integer cid) throws AppException;
 	
-	public abstract List<StudentCourse> getRegistrationsByStudent(Integer rno);
+	public abstract List<StudentCourse> getRegistrationsByStudent(Integer rno) throws AppException;
 	
 }
